@@ -122,6 +122,17 @@ Project 7: Virtual Machine Translator (Part I)
 
 ---
 
+## Repository
+
+Source code is available on GitHub:
+[https://github.com/TalehMalikov/vm_transaltor](https://github.com/TalehMalikov/vm_transaltor)
+
+```bash
+git clone https://github.com/TalehMalikov/vm_transaltor.git
+```
+
+---
+
 ## Author
 
 Taleh Malikov
