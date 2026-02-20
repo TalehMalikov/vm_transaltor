@@ -172,6 +172,12 @@ This project was developed with the assistance of **Claude** (AI assistant by An
 
 ---
 
+## Weakness
+
+This implementation prioritizes simplicity and correctness over performance. No cycle optimization was done — every operation goes through the stack even when intermediate pushes and pops could be avoided by keeping values in registers directly. 
+
+---
+
 ## Author
 
 Taleh Malikov
