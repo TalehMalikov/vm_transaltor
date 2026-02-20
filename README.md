@@ -1,22 +1,32 @@
-# VM Translator – Project 7 (Nand2Tetris)
+# VM Translator – Projects 7 & 8 (Nand2Tetris)
 
-A Python-based VM Translator that converts Hack VM language (`.vm`) into Hack Assembly (`.asm`), built as part of the Nand2Tetris course (Project 7).
+A Python-based VM Translator that converts Hack VM language (`.vm`) into Hack Assembly (`.asm`), built as part of the Nand2Tetris course (Project 8).
 
 ---
 
 ## Project Structure
 
 ```
-malikovTalehProject7/
+malikovTalehProject8/
 ├── main.py                  # Entry point — runs the translator on test files
 ├── data/                    # Input .vm files and output .asm files
-│   ├── StackArithmetic/
-│   │   ├── SimpleAdd/
-│   │   └── StackTest/
-│   └── MemoryAccess/
-│       ├── BasicTest/
-│       ├── PointerTest/
-│       └── StaticTest/
+│   ├── part1/
+│   │   ├── StackArithmetic/
+│   │   │   ├── SimpleAdd/
+│   │   │   └── StackTest/
+│   │   └── MemoryAccess/
+│   │       ├── BasicTest/
+│   │       ├── PointerTest/
+│   │       └── StaticTest/
+│   └── part2/
+│       ├── ProgramFlow/
+│       │   ├── BasicLoop/
+│       │   └── FibonacciSeries/
+│       └── FunctionCalls/
+│           ├── SimpleFunction/
+│           ├── NestedCall/
+│           ├── FibonacciElement/
+│           └── StaticsTest/
 ├── vm_translator/           # Core translation package
 │   ├── __init__.py
 │   ├── vm_translator.py     # VMTranslator — orchestrates the translation
@@ -33,11 +43,11 @@ malikovTalehProject7/
 
 The translator follows a two-stage pipeline:
 
-1. **Parser** — reads a `.vm` file line by line, strips comments and whitespace, and classifies each command into types: `C_PUSH`, `C_POP`, or `C_ARITHMETIC`.
+1. **Parser** — reads a `.vm` file line by line, strips comments and whitespace, and classifies each command into types: `C_PUSH`, `C_POP`, `C_ARITHMETIC`, `C_LABEL`, `C_GOTO`, `C_IF`, `C_FUNCTION`, `C_CALL`, or `C_RETURN`.
 
 2. **CodeWriter** — takes parsed commands and writes the corresponding Hack Assembly instructions to an `.asm` output file.
 
-The `VMTranslator` class ties these two together and drives the full translation process.
+The `VMTranslator` class ties these two together. It can handle both a single `.vm` file and an entire folder of `.vm` files, combining them into one `.asm` output.
 
 ---
 
@@ -62,6 +72,20 @@ The `VMTranslator` class ties these two together and drives the full translation
 | `push <segment> <index>` | Pushes value from segment onto the stack |
 | `pop <segment> <index>` | Pops top of stack into segment |
 
+### Program Flow
+| Command | Description |
+|---------|-------------|
+| `label <label>` | Declares a label in the current function |
+| `goto <label>` | Unconditional jump to label |
+| `if-goto <label>` | Pops top of stack; jumps to label if non-zero |
+
+### Function Commands
+| Command | Description |
+|---------|-------------|
+| `function <name> <nVars>` | Declares a function, initializes nVars locals to 0 |
+| `call <name> <nArgs>` | Calls a function with nArgs arguments |
+| `return` | Returns from current function to the caller |
+
 ### Supported Memory Segments
 | Segment | Description |
 |---------|-------------|
@@ -84,17 +108,26 @@ Run the translator from the project root:
 python main.py
 ```
 
-Edit `main.py` to choose which `.vm` files to translate:
+Edit `main.py` to choose which `.vm` files or folders to translate:
 
 ```python
 test_files = [
-    'data/StackArithmetic/SimpleAdd/SimpleAdd.vm',
-    'data/MemoryAccess/BasicTest/BasicTest.vm',
-    # add more as needed
+    'data/part2/ProgramFlow/BasicLoop/BasicLoop.vm',  # single file
+    'data/part2/FunctionCalls/FibonacciElement/',      # folder
 ]
 ```
 
-Each `.vm` file will produce a corresponding `.asm` file in the same directory.
+Single `.vm` files produce a corresponding `.asm` file in the same directory. Folders produce a single `.asm` file named after the folder, with bootstrap code prepended.
+
+---
+
+## Bootstrap
+
+When translating a folder, the translator automatically:
+1. Sets `SP = 256`
+2. Calls `Sys.init` as the program entry point
+
+Single files do not get bootstrap code.
 
 ---
 
@@ -118,7 +151,7 @@ Use the **CPU Emulator** from the Nand2Tetris software suite to verify output:
 ## Course
 
 [Nand2Tetris](https://www.nand2tetris.org/) — *Building a Modern Computer from First Principles*  
-Project 7: Virtual Machine Translator (Part I)
+Projects 7 & 8: Virtual Machine Translator (Parts I & II)
 
 ---
 
@@ -130,6 +163,12 @@ Source code is available on GitHub:
 ```bash
 git clone https://github.com/TalehMalikov/vm_transaltor.git
 ```
+
+---
+
+## Collaboration
+
+This project was developed with the assistance of **Claude** (AI assistant by Anthropic), who helped prepare and update the project documentation and assisted in identifying and debugging issues during the development of the VM translator, particularly around the function calling convention and static variable handling across multiple files.
 
 ---
 
