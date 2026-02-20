@@ -1,3 +1,5 @@
+from fnmatch import translate
+
 from vm_translator.vm_translator import VMTranslator
 
 if __name__ == '__main__':
@@ -12,19 +14,27 @@ if __name__ == '__main__':
     test_files = [
         'data/part2/ProgramFlow/BasicLoop/BasicLoop.vm',
         'data/part2/ProgramFlow/FibonacciSeries/FibonacciSeries.vm',
-        'data/part2/FunctionCalls/FibonacciElement/FibonacciElement.vm',
-        'data/part2/FunctionCalls/NestedCall/NestedCall.vm',
         'data/part2/FunctionCalls/SimpleFunction/SimpleFunction.vm',
-        'data/part2/FunctionCalls/StaticsTest/StaticsTest.vm',
+        # these need the FOLDER, not a single file
+        'data/part2/FunctionCalls/FibonacciElement/',
+        'data/part2/FunctionCalls/NestedCall/',
+        'data/part2/FunctionCalls/StaticsTest/',
     ]
 
-    test_files = [
+    input = [
         'data/part2/ProgramFlow/BasicLoop/BasicLoop.vm',
         'data/part2/ProgramFlow/FibonacciSeries/FibonacciSeries.vm',
+        'data/part2/FunctionCalls/SimpleFunction/SimpleFunction.vm',
     ]
-    
-    for f in test_files:
-        print(f"Translating {f}...")
-        translator = VMTranslator(f)
-        translator.translate()
-        print(f"Done!")
+
+    translator = VMTranslator()
+    for f in input:
+        if f.endswith('.vm'): #single file
+            print(f"Translating file {f}...") 
+            translator.write_file(f)
+
+        else: #folder
+            print(f"Translating folder {f}...")
+            translator.write_folder(f)
+        
+    print(f"Yayyy!")

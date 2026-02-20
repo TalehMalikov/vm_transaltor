@@ -6,6 +6,19 @@ class CodeWriter:
         self.label_counter = 0  # for unique labels in eq, gt, lt
         self.translations = Translations()
 
+    def write_init(self):
+        asm = '@256\nD=A\n@SP\nM=D\n'
+        asm += self.translations.WriteCall('Sys.init', 0)
+        self.file.write(asm + '\n')
+
+    def write_push(self, segment, index):
+        asm = self.translations.Push(segment, index)
+        self.file.write(asm + '\n')
+
+    def write_pop(self, segment, index):
+        asm = self.translations.Pop(segment, index)
+        self.file.write(asm + '\n')
+
     def write_arithmetic(self, cmd):
         asm = ''
         if cmd == 'add':
@@ -31,14 +44,6 @@ class CodeWriter:
             asm = self.translations.Not()
         self.file.write(asm + '\n')
 
-    def write_push(self, segment, index):
-        asm = self.translations.Push(segment, index)
-        self.file.write(asm + '\n')
-
-    def write_pop(self, segment, index):
-        asm = self.translations.Pop(segment, index)
-        self.file.write(asm + '\n')
-
     def write_label(self, label):
         asm = self.translations.Label(label)
         self.file.write(asm + '\n')
@@ -49,6 +54,18 @@ class CodeWriter:
     
     def write_if(self, label):
         asm = self.translations.IfGoto(label)
+        self.file.write(asm + '\n')
+
+    def write_function(self, function_name, num_locals):
+        asm = self.translations.WriteFunction(function_name, num_locals)
+        self.file.write(asm + '\n')
+    
+    def write_call(self, function_name, num_args):
+        asm = self.translations.WriteCall(function_name, num_args)
+        self.file.write(asm + '\n')
+
+    def write_return(self):
+        asm = self.translations.WriteReturn()
         self.file.write(asm + '\n')
 
     def close(self):

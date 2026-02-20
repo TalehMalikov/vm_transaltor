@@ -24,14 +24,22 @@ class Parser:
             return 'C_PUSH'
         elif cmd == 'pop':
             return 'C_POP'
+        elif cmd in ['add', 'sub', 'neg', 'eq', 'gt', 'lt', 'and', 'or', 'not']:
+            return 'C_ARITHMETIC'
+        
         elif cmd == 'label':
             return 'C_LABEL'
         elif cmd == 'goto':
             return 'C_GOTO'
         elif cmd == 'if-goto':
             return 'C_IF'
-        elif cmd in ['add', 'sub', 'neg', 'eq', 'gt', 'lt', 'and', 'or', 'not']:
-            return 'C_ARITHMETIC'
+        
+        elif cmd == 'function':
+            return 'C_FUNCTION'
+        elif cmd == 'call':
+            return 'C_CALL'
+        elif cmd == 'return':
+            return 'C_RETURN'
     
     def segment(self):
         return self.commands[self.current].split()[1]
