@@ -15,8 +15,8 @@ class VMTranslator:
             None, but initializes self.parser and self.code_writer for the translation process.
         """
         self.parser : Parser
-        self.code_writer : CodeWriter
-        
+        self.code_writer : CodeWriter  
+
     def write_folder(self, foldername):
         """
         Function that handles the translation of all VM files in a given folder.
@@ -39,7 +39,6 @@ class VMTranslator:
                 
         self.code_writer.close()
 
-
     def write_bootstrap(self):
         """
         Function that writes the bootstrap code to the output assembly file before translating any VM commands.
@@ -51,7 +50,6 @@ class VMTranslator:
             None, but writes the bootstrap code to the output file to initialize the stack pointer and call Sys.init.
         """
         self.code_writer.write_init()
-
     
     def write_file(self, filename):
         """
@@ -68,7 +66,6 @@ class VMTranslator:
         
         self._translate()
         self.code_writer.close()
-
 
     def _translate(self):
         """

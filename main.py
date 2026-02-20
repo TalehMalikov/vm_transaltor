@@ -32,4 +32,3 @@ if __name__ == '__main__':
             translator.write_folder(f)
         
     print(f"Yayyy!")
-
