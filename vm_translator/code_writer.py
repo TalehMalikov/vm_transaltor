@@ -7,6 +7,7 @@ class CodeWriter:
         self.translations = Translations()
 
     def write_arithmetic(self, cmd):
+        asm = ''
         if cmd == 'add':
             asm = self.translations.Add()
         elif cmd == 'sub':
@@ -36,6 +37,18 @@ class CodeWriter:
 
     def write_pop(self, segment, index):
         asm = self.translations.Pop(segment, index)
+        self.file.write(asm + '\n')
+
+    def write_label(self, label):
+        asm = self.translations.Label(label)
+        self.file.write(asm + '\n')
+    
+    def write_goto(self, label):
+        asm = self.translations.Goto(label)
+        self.file.write(asm + '\n')
+    
+    def write_if(self, label):
+        asm = self.translations.IfGoto(label)
         self.file.write(asm + '\n')
 
     def close(self):

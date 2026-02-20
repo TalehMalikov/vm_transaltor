@@ -24,7 +24,13 @@ class Parser:
             return 'C_PUSH'
         elif cmd == 'pop':
             return 'C_POP'
-        else:
+        elif cmd == 'label':
+            return 'C_LABEL'
+        elif cmd == 'goto':
+            return 'C_GOTO'
+        elif cmd == 'if-goto':
+            return 'C_IF'
+        elif cmd in ['add', 'sub', 'neg', 'eq', 'gt', 'lt', 'and', 'or', 'not']:
             return 'C_ARITHMETIC'
     
     def segment(self):

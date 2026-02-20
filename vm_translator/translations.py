@@ -46,6 +46,7 @@ class Translations:
             return f'@{ptrs[index]}\nD=M\n{self.constants["push_to_stack"]}'
         elif segment == 'static':
             return f'@Static.{index}\nD=M\n{self.constants["push_to_stack"]}'
+        return ''  # for segments that don't support push
     
     def Pop(self, segment, index):
         if segment in ['local', 'argument', 'this', 'that']:
@@ -57,4 +58,13 @@ class Translations:
             return f'@SP\nAM=M-1\nD=M\n@{ptrs[index]}\nM=D'
         elif segment == 'static':
             return f'@SP\nAM=M-1\nD=M\n@Static.{index}\nM=D'
+        return ''  # for segments that don't support pop
     
+    def Label(self, label):
+        return f'({label})'
+
+    def Goto(self, label):
+        return f'@{label}\n0;JMP'
+    
+    def IfGoto(self, label):
+        return f'@SP\nAM=M-1\nD=M\n@{label}\nD;JNE'
