@@ -8,6 +8,15 @@ if __name__ == '__main__':
         'data/part1/MemoryAccess/PointerTest/PointerTest.vm',
         'data/part1/MemoryAccess/StaticTest/StaticTest.vm',
     ]
+
+    test_files = [
+        'data/part2/ProgramFlow/BasicLoop/BasicLoop.vm',
+        'data/part2/ProgramFlow/FibonacciSeries/FibonacciSeries.vm',
+        'data/part2/FunctionCalls/FibonacciElement/FibonacciElement.vm',
+        'data/part2/FunctionCalls/NestedCall/NestedCall.vm',
+        'data/part2/FunctionCalls/SimpleFunction/SimpleFunction.vm',
+        'data/part2/FunctionCalls/StaticsTest/StaticsTest.vm',
+    ]
     
     for f in test_files:
         print(f"Translating {f}...")
