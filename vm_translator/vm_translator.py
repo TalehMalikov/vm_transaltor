@@ -9,14 +9,15 @@ class VMTranslator:
         self.code_writer : CodeWriter
         
     def write_folder(self, foldername):
-        output = os.path.join(foldername, os.path.basename(foldername) + '.asm')
+        output = os.path.join(foldername, os.path.basename(foldername.rstrip('/')) + '.asm')
         self.code_writer = CodeWriter(output)  # one shared output file
         self.write_bootstrap()
 
         for f in os.listdir(foldername):
             if f.endswith('.vm'):
                 self.parser = Parser(os.path.join(foldername, f))
-                self._translate()  # all write to same code_writer
+                self.code_writer.set_filename(f.replace('.vm', ''))  # add this!
+                self._translate()
                 
         self.code_writer.close()
 

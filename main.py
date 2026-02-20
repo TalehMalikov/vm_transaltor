@@ -25,6 +25,10 @@ if __name__ == '__main__':
         'data/part2/ProgramFlow/BasicLoop/BasicLoop.vm',
         'data/part2/ProgramFlow/FibonacciSeries/FibonacciSeries.vm',
         'data/part2/FunctionCalls/SimpleFunction/SimpleFunction.vm',
+        # these need the FOLDER, not a single file
+        'data/part2/FunctionCalls/FibonacciElement/',
+        'data/part2/FunctionCalls/NestedCall/',
+        'data/part2/FunctionCalls/StaticsTest/',
     ]
 
     translator = VMTranslator()

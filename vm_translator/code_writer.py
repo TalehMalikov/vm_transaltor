@@ -5,18 +5,23 @@ class CodeWriter:
         self.file = open(filename, 'w')
         self.label_counter = 0  # for unique labels in eq, gt, lt
         self.translations = Translations()
+        self.filename = 'Static'
+
+    def set_filename(self, filename):
+        self.filename = filename
 
     def write_init(self):
         asm = '@256\nD=A\n@SP\nM=D\n'
-        asm += self.translations.WriteCall('Sys.init', 0)
+        asm += self.translations.WriteCall('Sys.init', 0, label_counter=self.label_counter)
+        self.label_counter += 1
         self.file.write(asm + '\n')
 
     def write_push(self, segment, index):
-        asm = self.translations.Push(segment, index)
+        asm = self.translations.Push(segment, index, self.filename)
         self.file.write(asm + '\n')
 
     def write_pop(self, segment, index):
-        asm = self.translations.Pop(segment, index)
+        asm = self.translations.Pop(segment, index, self.filename)
         self.file.write(asm + '\n')
 
     def write_arithmetic(self, cmd):
@@ -61,7 +66,8 @@ class CodeWriter:
         self.file.write(asm + '\n')
     
     def write_call(self, function_name, num_args):
-        asm = self.translations.WriteCall(function_name, num_args)
+        asm = self.translations.WriteCall(function_name, num_args, label_counter=self.label_counter)
+        self.label_counter += 1
         self.file.write(asm + '\n')
 
     def write_return(self):

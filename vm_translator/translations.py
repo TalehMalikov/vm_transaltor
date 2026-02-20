@@ -34,7 +34,7 @@ class Translations:
     def Not(self):
         return '@SP\nA=M-1\nM=!M'
     
-    def Push(self, segment, index):
+    def Push(self, segment, index, fileName):
         if segment == 'constant':
             return f'@{index}\nD=A\n{self.constants["push_to_stack"]}'
         elif segment in ['local', 'argument', 'this', 'that']:
@@ -45,10 +45,10 @@ class Translations:
             ptrs = {'0': 'THIS', '1': 'THAT'}
             return f'@{ptrs[index]}\nD=M\n{self.constants["push_to_stack"]}'
         elif segment == 'static':
-            return f'@Static.{index}\nD=M\n{self.constants["push_to_stack"]}'
-        return ''  # for segments that don't support push
+            return f'@{fileName}.{index}\nD=M\n{self.constants["push_to_stack"]}'
+        return '' 
     
-    def Pop(self, segment, index):
+    def Pop(self, segment, index, fileName):
         if segment in ['local', 'argument', 'this', 'that']:
             return f'@{index}\nD=A\n@{self.constants["seg_ptrs"][segment]}\nD=M+D\n@R13\nM=D\n@SP\nAM=M-1\nD=M\n@R13\nA=M\nM=D'
         elif segment == 'temp':
@@ -57,8 +57,8 @@ class Translations:
             ptrs = {'0': 'THIS', '1': 'THAT'}
             return f'@SP\nAM=M-1\nD=M\n@{ptrs[index]}\nM=D'
         elif segment == 'static':
-            return f'@SP\nAM=M-1\nD=M\n@Static.{index}\nM=D'
-        return ''  # for segments that don't support pop
+            return f'@SP\nAM=M-1\nD=M\n@{fileName}.{index}\nM=D'
+        return ''  
     
     def Label(self, label):
         return f'({label})'
@@ -72,13 +72,13 @@ class Translations:
     def WriteFunction(self, function_name, num_locals):
         asm = f'({function_name})\n'
         for i in range(int(num_locals)):
-            asm += self.Push('constant', '0') + '\n'
+            asm += self.Push('constant', '0','') + '\n'
         return asm
     
-    def WriteCall(self, function_name, num_args):
+    def WriteCall(self, function_name, num_args, label_counter):
         #push return address
-        asm = f'@RETURN_ADDRESS{self.label_counter}\nD=A\n{self.constants["push_to_stack"]}\n'
-        self.label_counter += 1
+        asm = f'@RETURN_ADDRESS{label_counter}\nD=A\n{self.constants["push_to_stack"]}\n'
+        label_counter += 1
 
         # push LCL, ARG, THIS, THAT
         asm += '@LCL\nD=M\n' + self.constants['push_to_stack'] + '\n'
@@ -87,7 +87,7 @@ class Translations:
         asm += '@THAT\nD=M\n' + self.constants['push_to_stack'] + '\n'
 
         # reposition ARG
-        asm += '@SP\nD=M\n@5\nD=D-A\n@{num_args}\nD=D-A\n@ARG\nM=D\n'
+        asm += f'@SP\nD=M\n@5\nD=D-A\n@{num_args}\nD=D-A\n@ARG\nM=D\n'
 
         # reposition LCL
         asm += '@SP\nD=M\n@LCL\nM=D\n'
@@ -96,7 +96,7 @@ class Translations:
         asm += self.Goto(function_name) + '\n'
 
         # declare return address label
-        asm += self.Label(f'RETURN_ADDRESS{self.label_counter - 1}') + '\n'
+        asm += self.Label(f'RETURN_ADDRESS{label_counter - 1}') + '\n'
 
         return asm
 
