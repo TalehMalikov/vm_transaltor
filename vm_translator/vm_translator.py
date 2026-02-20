@@ -18,5 +18,11 @@ class VMTranslator:
     
             elif self.parser.command_type() == 'C_ARITHMETIC':
                 self.code_writer.write_arithmetic(self.parser.command())
+            elif self.parser.command_type() == 'C_LABEL':
+                self.code_writer.write_label(self.parser.segment())
+            elif self.parser.command_type() == 'C_GOTO':
+                self.code_writer.write_goto(self.parser.segment())
+            elif self.parser.command_type() == 'C_IF':
+                self.code_writer.write_if(self.parser.segment())
 
         self.code_writer.close()

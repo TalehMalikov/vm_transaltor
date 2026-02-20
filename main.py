@@ -17,6 +17,11 @@ if __name__ == '__main__':
         'data/part2/FunctionCalls/SimpleFunction/SimpleFunction.vm',
         'data/part2/FunctionCalls/StaticsTest/StaticsTest.vm',
     ]
+
+    test_files = [
+        'data/part2/ProgramFlow/BasicLoop/BasicLoop.vm',
+        'data/part2/ProgramFlow/FibonacciSeries/FibonacciSeries.vm',
+    ]
     
     for f in test_files:
         print(f"Translating {f}...")
